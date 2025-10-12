@@ -1,0 +1,46 @@
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+}
+
+.todo-item.completed {
+  background-color: #e0f7fa; /* Un color diferente para tareas completadas */
+}
+
+.todo-item input[type="checkbox"] {
+  margin-right: 15px;
+  transform: scale(1.2); /* Hace el checkbox un poco más grande */
+}
+
+.todo-item span {
+  flex-grow: 1;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.todo-item.completed span {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.todo-item button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.todo-item button:hover {
+  background-color: #d32f2f;
+}

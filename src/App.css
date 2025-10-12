@@ -1,0 +1,22 @@
+
+.todo-app-container {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px; /* Limita el ancho máximo para una mejor UI */
+  text-align: center;
+}
+
+.todo-app-container h1 {
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 2.2em;
+}
+
+.no-todos {
+  color: #777;
+  font-style: italic;
+  margin-top: 30px;
+}

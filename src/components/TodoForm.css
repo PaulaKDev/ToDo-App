@@ -1,0 +1,35 @@
+.todo-form {
+  display: flex;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.todo-input {
+  flex-grow: 1; /* Ocupa el espacio restante */
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+  margin-right: 10px;
+}
+
+.todo-input:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.add-button {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+  background-color: #1976d2;
+}
