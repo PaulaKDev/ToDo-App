@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
-import './App.css'; // Para los estilos generales del contenedor
+import './App.css'; // Para los estilos generales
 
 function App() {
 
@@ -11,6 +11,9 @@ function App() {
         const storedTodos = localStorage.getItem('todos');
         return storedTodos ? JSON.parse(storedTodos) : [];
     });
+
+    //Nuevo erstado para manejar el filtro de tareas
+    const [filter, setFilter] = useState('all'); // / Por defecto, mostrar todas las tareas
 
     // Efecto para guardar las tareas en el localStorage cada vez que 'todos' cambie
     useEffect(() => {
@@ -40,19 +43,57 @@ function App() {
         setTodos(todos.filter((todo) => todo.id !== id));
     };
 
+  // --- NUEVA LÓGICA DE FILTRADO ---
+  const filteredTodos = todos.filter(todo => {
+    if (filter === 'completed') {
+      return todo.completed;
+    } else if (filter === 'pending') {
+      return !todo.completed;
+    }
+    return true; // Si filter es 'all', devuelve todas las tareas
+  });
+  // --- FIN NUEVA LÓGICA DE FILTRADO ---
+
   return (
     <div className="todo-app-container">
       <h1>Mi Lista de Tareas</h1>
       <TodoForm addTodo={addTodo} />
-      {/* Solo mostramos la lista si hay tareas */}
-      {todos.length > 0 ? (
+
+         {/* --- NUEVOS BOTONES DE FILTRO --- */}
+      <div className="filter-buttons">
+        <button
+          onClick={() => setFilter('all')}
+          className={filter === 'all' ? 'active' : ''}
+        >
+          Todas
+        </button>
+        <button
+          onClick={() => setFilter('pending')}
+          className={filter === 'pending' ? 'active' : ''}
+        >
+          Pendientes
+        </button>
+        <button
+          onClick={() => setFilter('completed')}
+          className={filter === 'completed' ? 'active' : ''}
+        >
+          Completadas
+        </button>
+      </div>
+      {/* --- FIN NUEVOS BOTONES DE FILTRO --- */}
+
+      {filteredTodos.length > 0 ? ( // Usamos filteredTodos aquí
         <TodoList
-          todos={todos}
+          todos={filteredTodos} // Pasamos las tareas filtradas
           toggleComplete={toggleComplete}
           deleteTodo={deleteTodo}
         />
       ) : (
-        <p className='no-todos'>¡No hay tareas pendientes! Añade nuevas.</p>
+        <p className="no-todos">
+          {filter === 'all' && "¡No tienes tareas pendientes! Añade una nueva."}
+          {filter === 'pending' && "¡No tienes tareas pendientes!"}
+          {filter === 'completed' && "¡No tienes tareas completadas!"}
+        </p>
       )}
     </div>
   );

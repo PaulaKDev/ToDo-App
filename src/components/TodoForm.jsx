@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import './TodoForm.css';
 
 function TodoForm({ addTodo }) {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState("");// Estado para el valor del input
 
     const handleSubmit = (e) => {
         e.preventDefault(); // Evitar que el formulario se envíe y se recargue la página
-        if (!value.trim()) return; // No agregar tareas vacías
+        if (!value.trim()) return; // No añadir tareas vacías
         addTodo(value);
-        setValue(""); // Limpiar el campo de entrada después de agregar la tarea
+        setValue(""); // Limpiar el input después de añadir la tarea
     };
 
     return (
