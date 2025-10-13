@@ -1,7 +1,6 @@
 import React, { useState } from 'react'; // Importa useState
 import './TodoItem.css';
 
-// Asegúrate de que editTodo se pase como prop aquí
 function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
   const [isEditing, setIsEditing] = useState(false); // Nuevo estado para controlar si se edita
   const [editText, setEditText] = useState(todo.text); // Estado para el texto del input de edición
@@ -12,7 +11,7 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
 
   const handleSave = () => {
     if (editText.trim() === '') {
-      alert('No puede estar vacío.');
+      alert('La tarea no puede estar vacía.');
       return;
     }
     editTodo(todo.id, editText); // Llama a la función de App.jsx para actualizar
@@ -48,9 +47,9 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
           type="text"
           value={editText}
           onChange={(e) => setEditText(e.target.value)}
-          onKeyDown={handleKeyDown} // Para guardar con Enter o cancelar con Escape
+          onKeyDown={handleKeyDown} // Guardar con Enter o cancelar con Escape
           className="edit-input" // Añade esta clase para estilos
-          autoFocus // Enfoca el input automáticamente al editar
+          autoFocus // Enfoca el input automáticamente
         />
       ) : (
         // Si no está en modo edición, muestra el texto
