@@ -6,13 +6,12 @@ import './App.css'; // Para los estilos generales
 function App() {
 
   // Estado para almacenar la lista de tareas
-  // Intentamos cargar las tareas desde el localStorage al inicio
     const [todos, setTodos] = useState(() => {
         const storedTodos = localStorage.getItem('todos');
         return storedTodos ? JSON.parse(storedTodos) : [];
     });
 
-    //Nuevo erstado para manejar el filtro de tareas
+  // Estado para el filtro de tareas
     const [filter, setFilter] = useState('all'); // / Por defecto, mostrar todas las tareas
 
     // Efecto para guardar las tareas en el localStorage cada vez que 'todos' cambie
@@ -42,6 +41,16 @@ function App() {
     const deleteTodo = (id) => {
         setTodos(todos.filter((todo) => todo.id !== id));
     };
+
+    // --- NUEVA FUNCIÓN PARA EDITAR TAREAS ---
+    const editTodo = (id, newText) => {
+        setTodos(
+            todos.map((todo) =>
+                todo.id === id ? { ...todo, text: newText } : todo
+            )
+        );
+    };
+      // --- FIN NUEVA FUNCIÓN PARA EDITAR TAREAS ---
 
   // --- NUEVA LÓGICA DE FILTRADO ---
   const filteredTodos = todos.filter(todo => {
