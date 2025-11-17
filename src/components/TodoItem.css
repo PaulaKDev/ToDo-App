@@ -60,6 +60,7 @@
 
 .todo-actions {
   display: flex;
+  position: relative; /* Clave para que el popover se posicione dentro de este div */
   gap: 5px; /* Espacio entre los botones de acción */
   margin-left: 10px;
 }

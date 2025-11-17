@@ -106,41 +106,16 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
         </span>
       )}
 
+      {/* Contenedor de acciones y popover */}
       <div className="todo-actions">
-        {isEditing ? (
-          <>
-            {/* Usar onMouseDown para que se ejecute antes del onBlur del input */}
-            <button onMouseDown={handleSave} className="save-button" disabled={showConfirm} aria-label="Guardar cambios de la tarea">Guardar</button>
-            <button onClick={handleCancel} className="cancel-button" disabled={showConfirm} aria-label="Cancelar edición de la tarea">Cancelar</button>
-          </>
-        ) : (
-          <>
-            {/* Solo mostramos el botón Editar si la tarea no está completada */}
-            {!todo.completed && (
-              <button onClick={handleEdit} className="edit-button" disabled={showConfirm} aria-label={`Editar la tarea: ${todo.text}`}>
-                Editar
-              </button>
-            )}
-            {/* Se añade la clase 'delete-button' para que coincida con el CSS */}
-            <button
-              onClick={handleDeleteClick}
-              className="delete-button"
-              disabled={showConfirm}
-              aria-label={`Eliminar la tarea: ${todo.text}`}
-            >
-              Eliminar
-            </button>
-          </>
-        )}
-
         {/* --- POPOVER DE CONFIRMACIÓN (renderizado condicional) --- */}
         <AnimatePresence>
           {showConfirm && (
             <motion.div
               className="confirm-popover"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.95, x: 10 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.95, x: 10 }}
               transition={{ duration: 0.15 }}
             >
               <span>¿Seguro?</span>
@@ -150,6 +125,22 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
           )}
         </AnimatePresence>
         {/* --- FIN POPOVER DE CONFIRMACIÓN --- */}
+        
+        {isEditing ? (
+          <>
+            <button onMouseDown={handleSave} className="save-button" disabled={showConfirm} aria-label="Guardar cambios de la tarea">Guardar</button>
+            <button onClick={handleCancel} className="cancel-button" disabled={showConfirm} aria-label="Cancelar edición de la tarea">Cancelar</button>
+          </>
+        ) : (
+          <>
+            {!todo.completed && (
+              <button onClick={handleEdit} className="edit-button" disabled={showConfirm} aria-label={`Editar la tarea: ${todo.text}`}>Editar</button>
+            )}
+            <button onClick={handleDeleteClick} className="delete-button" disabled={showConfirm} aria-label={`Eliminar la tarea: ${todo.text}`}>
+              Eliminar
+            </button>
+          </>
+        )}
       </div>
     </motion.li>
   );
