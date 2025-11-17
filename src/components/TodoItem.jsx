@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './TodoItem.css';
 
 function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
@@ -6,6 +6,7 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
   const [editText, setEditText] = useState(todo.text);
   // --- NUEVO ESTADO: Para controlar la visibilidad del popover de confirmación ---
   const [showConfirm, setShowConfirm] = useState(false);
+  const editInputRef = useRef(null); // Referencia para el input de edición
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -13,7 +14,8 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
 
   const handleSave = () => {
     if (editText.trim() === '') {
-      alert('La tarea no puede estar vacía.');
+      // Si el texto está vacío al guardar, cancelamos la edición para no tener una tarea vacía.
+      handleCancel();
       return;
     }
     editTodo(todo.id, editText);
@@ -26,10 +28,10 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
       handleSave();
     }
-    if (e.key === 'Escape') {
+    if (e.code === 'Escape') {
       handleCancel();
     }
   };
@@ -49,28 +51,49 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
   };
   // --- FIN NUEVAS FUNCIONES ---
 
+  // Efecto para enfocar el input cuando entramos en modo de edición
+  useEffect(() => {
+    if (isEditing && editInputRef.current) {
+      editInputRef.current.focus();
+    }
+  }, [isEditing]);
+
   return (
     <li className={`todo-item ${todo.completed ? 'completed' : ''}`}>
       <input
         type="checkbox"
         checked={todo.completed}
         onChange={() => toggleComplete(todo.id)}
-        disabled={isEditing || showConfirm} // Deshabilitar si se está editando o confirmando
+        disabled={isEditing || showConfirm}
+        aria-label={`Marcar como ${todo.completed ? 'incompleta' : 'completada'} la tarea: ${todo.text}`}
       />
 
       {isEditing ? (
         <input
           type="text"
+          ref={editInputRef}
           value={editText}
           onChange={(e) => setEditText(e.target.value)}
           onKeyDown={handleKeyDown}
           className="edit-input"
-          autoFocus
-          onBlur={handleSave}
-          disabled={showConfirm} // Deshabilitar si se está confirmando
+          onBlur={handleCancel} // Si pierde el foco, cancela la edición para evitar guardados accidentales
+          disabled={showConfirm}
+          aria-label={`Editando la tarea: ${todo.text}`}
         />
       ) : (
-        <span onDoubleClick={handleEdit} className={showConfirm ? 'disabled-text' : ''}>
+        <span
+          onDoubleClick={!todo.completed ? handleEdit : undefined}
+          // Mejoras de accesibilidad: permite editar con la tecla Enter
+          onKeyDown={(e) => {
+            if ((e.code === 'Enter' || e.code === 'NumpadEnter') && !todo.completed) {
+              handleEdit();
+            }
+          }}
+          role="button" // Indica que es un elemento interactivo
+          tabIndex={0} // Hace que el span sea enfocable
+          className={showConfirm ? 'disabled-text' : ''}
+          aria-label={`Tarea: ${todo.text}. Doble clic o presiona Enter para editar.`}
+        >
           {todo.text}
         </span>
       )}
@@ -78,19 +101,25 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
       <div className="todo-actions">
         {isEditing ? (
           <>
-            <button onClick={handleSave} className="save-button" disabled={showConfirm}>Guardar</button>
-            <button onClick={handleCancel} className="cancel-button" disabled={showConfirm}>Cancelar</button>
+            {/* Usar onMouseDown para que se ejecute antes del onBlur del input */}
+            <button onMouseDown={handleSave} className="save-button" disabled={showConfirm} aria-label="Guardar cambios de la tarea">Guardar</button>
+            <button onClick={handleCancel} className="cancel-button" disabled={showConfirm} aria-label="Cancelar edición de la tarea">Cancelar</button>
           </>
         ) : (
           <>
             {/* Solo mostramos el botón Editar si la tarea no está completada */}
             {!todo.completed && (
-              <button onClick={handleEdit} className="edit-button" disabled={showConfirm}>
+              <button onClick={handleEdit} className="edit-button" disabled={showConfirm} aria-label={`Editar la tarea: ${todo.text}`}>
                 Editar
               </button>
             )}
-            {/* Llamamos a handleDeleteClick para mostrar el popover */}
-            <button onClick={handleDeleteClick} className="delete-button" disabled={showConfirm}>
+            {/* Se añade la clase 'delete-button' para que coincida con el CSS */}
+            <button
+              onClick={handleDeleteClick}
+              className="delete-button"
+              disabled={showConfirm}
+              aria-label={`Eliminar la tarea: ${todo.text}`}
+            >
               Eliminar
             </button>
           </>
@@ -100,8 +129,8 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
         {showConfirm && (
           <div className="confirm-popover">
             <span>¿Seguro?</span>
-            <button onClick={confirmDelete} className="confirm-yes">Sí</button>
-            <button onClick={cancelDelete} className="confirm-no">No</button>
+            <button onClick={confirmDelete} className="confirm-yes" aria-label="Confirmar eliminación">Sí</button>
+            <button onClick={cancelDelete} className="confirm-no" aria-label="Cancelar eliminación">No</button>
           </div>
         )}
         {/* --- FIN POPOVER DE CONFIRMACIÓN --- */}
