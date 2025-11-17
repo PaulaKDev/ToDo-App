@@ -1,6 +1,16 @@
 .todo-list {
   list-style: none; /* Elimina los puntos de la lista */
   padding: 0;
-  margin: 20px 0;
+  /* Usar la variable de espaciado definida en TodoItem.css para consistencia */
+  margin: var(--spacing-xl, 20px) 0;
   width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+/* Estilos para el mensaje que aparece cuando no hay tareas */
+.empty-list-message {
+  text-align: center;
+  color: #6c757d; /* Un color gris suave */
+  font-style: italic;
+  padding: var(--spacing-xl, 20px) 0;
+  font-size: 1.1em;
 }
