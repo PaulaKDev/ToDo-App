@@ -1,4 +1,5 @@
 .todo-item {
+  position: relative; /* Clave para que el popover se posicione correctamente */
   display: flex;
   align-items: center;
   padding: 10px;

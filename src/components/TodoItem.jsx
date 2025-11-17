@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import './TodoItem.css';
 
 function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
@@ -134,13 +134,21 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
         )}
 
         {/* --- POPOVER DE CONFIRMACIÓN (renderizado condicional) --- */}
-        {showConfirm && (
-          <div className="confirm-popover">
-            <span>¿Seguro?</span>
-            <button onClick={confirmDelete} className="confirm-yes" aria-label="Confirmar eliminación">Sí</button>
-            <button onClick={cancelDelete} className="confirm-no" aria-label="Cancelar eliminación">No</button>
-          </div>
-        )}
+        <AnimatePresence>
+          {showConfirm && (
+            <motion.div
+              className="confirm-popover"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+            >
+              <span>¿Seguro?</span>
+              <button onClick={confirmDelete} className="confirm-yes" aria-label="Confirmar eliminación">Sí</button>
+              <button onClick={cancelDelete} className="confirm-no" aria-label="Cancelar eliminación">No</button>
+            </motion.div>
+          )}
+        </AnimatePresence>
         {/* --- FIN POPOVER DE CONFIRMACIÓN --- */}
       </div>
     </motion.li>
