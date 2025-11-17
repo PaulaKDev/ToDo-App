@@ -136,7 +136,11 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
             {!todo.completed && (
               <button onClick={handleEdit} className="edit-button" disabled={showConfirm} aria-label={`Editar la tarea: ${todo.text}`}>Editar</button>
             )}
-            <button onClick={handleDeleteClick} className="delete-button" disabled={showConfirm} aria-label={`Eliminar la tarea: ${todo.text}`}>
+            <button
+              onClick={handleDeleteClick}
+              className="delete-button" /* Asegurarse que esta clase está presente */
+              disabled={showConfirm}
+              aria-label={`Eliminar la tarea: ${todo.text}`}>
               Eliminar
             </button>
           </>
