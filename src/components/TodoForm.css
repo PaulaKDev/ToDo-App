@@ -1,35 +1,53 @@
+/* Usar variables CSS (Custom Properties) para una fácil tematización y mantenimiento */
+:root {
+  --primary-color: #2196f3;
+  --primary-color-dark: #1976d2;
+  --border-color: #ccc;
+  --border-radius: 4px;
+  --focus-shadow-color: rgba(33, 150, 243, 0.2);
+  --form-gap: 10px;
+}
+
 .todo-form {
   display: flex;
   margin-bottom: 20px;
   width: 100%;
+  gap: var(--form-gap); /* Usar gap para el espaciado es más moderno que margin */
 }
 
 .todo-input {
   flex-grow: 1; /* Ocupa el espacio restante */
   padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
   font-size: 1em;
-  margin-right: 10px;
+  /* margin-right ha sido reemplazado por 'gap' en .todo-form */
 }
 
-.todo-input:focus {
+/* :focus-visible es mejor para la accesibilidad, muestra el foco solo en navegación por teclado */
+.todo-input:focus-visible {
   outline: none;
-  border-color: #2196f3;
-  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--focus-shadow-color);
 }
 
 .add-button {
-  background-color: #2196f3;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   cursor: pointer;
   font-size: 1em;
   transition: background-color 0.3s ease;
 }
 
 .add-button:hover {
-  background-color: #1976d2;
+  background-color: var(--primary-color-dark);
+}
+
+/* Añadir un estado visual para cuando el botón está deshabilitado */
+.add-button:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
 }
