@@ -5,6 +5,10 @@ import './TodoList.css';
 // Recibir editTodo aquí
 function TodoList({ todos, toggleComplete, deleteTodo, editTodo }) {
   return (
+    // Si no hay tareas, mostrar un mensaje amigable
+    todos.length === 0 ? (
+      <p className="empty-list-message">¡No hay tareas pendientes! Añade una nueva.</p>
+    ) : (
     <ul className="todo-list">
       {todos.map(todo => (
         <TodoItem
@@ -16,6 +20,7 @@ function TodoList({ todos, toggleComplete, deleteTodo, editTodo }) {
         />
       ))}
     </ul>
+    )
   );
 }
 
