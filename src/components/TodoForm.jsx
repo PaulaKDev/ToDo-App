@@ -11,6 +11,9 @@ function TodoForm({ addTodo }) {
         setValue(""); // Limpiar el input después de añadir la tarea
     };
 
+    // Variable para determinar si el botón debe estar deshabilitado.
+    const isButtonDisabled = value.trim() === "";
+
     return (
         <form onSubmit={handleSubmit} className="todo-form">
         <input
@@ -18,9 +21,12 @@ function TodoForm({ addTodo }) {
             className="todo-input"
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="Agregar nueva tarea"
+            placeholder="Añadir nueva tarea"
+            aria-label="Campo para añadir una nueva tarea"
         />
-        <button type="submit" className="todo-button">Agregar</button>
+        <button type="submit" className="add-button" disabled={isButtonDisabled} aria-label="Añadir tarea">
+            Añadir
+        </button>
         </form>
     );
 }
