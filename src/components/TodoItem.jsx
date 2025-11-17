@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import './TodoItem.css';
 
 function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
@@ -59,7 +60,14 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
   }, [isEditing]);
 
   return (
-    <li className={`todo-item ${todo.completed ? 'completed' : ''}`}>
+    <motion.li
+      className={`todo-item ${todo.completed ? 'completed' : ''}`}
+      layout // Anima el cambio de posición si la lista se reordena
+      initial={{ opacity: 0, y: 50 }} // Estado inicial: invisible y 50px abajo
+      animate={{ opacity: 1, y: 0 }} // Estado animado: totalmente visible y en su posición final
+      exit={{ opacity: 0, x: -100, transition: { duration: 0.3 } }} // Estado de salida: se desvanece y se mueve a la izquierda
+      transition={{ type: 'spring', stiffness: 120, damping: 15 }} // Tipo de animación elástica
+    >
       <input
         type="checkbox"
         checked={todo.completed}
@@ -135,7 +143,7 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo }) {
         )}
         {/* --- FIN POPOVER DE CONFIRMACIÓN --- */}
       </div>
-    </li>
+    </motion.li>
   );
 }
 
